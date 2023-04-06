@@ -1,0 +1,181 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header{
+  background-color:rgb(236, 181, 79) /*this your primary color*/;
+  background:linear-gradient(rgba(250,0,0,0.5),transparent);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@import url('https://fonts.googleapis.com/css?family=Lato:100&display=swap');
+.container {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center {
+  width: 180px;
+  height: 60px;
+  position: absolute;
+}
+
+.btn {
+  width: 180px;
+  height: 60px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #000000;
+  outline: none;
+  transition: 1s ease-in-out;
+}
+
+svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  fill: none;
+  stroke: #fff;
+  stroke-dasharray: 150 480;
+  stroke-dashoffset: 150;
+  transition: 1s ease-in-out;
+}
+
+.btn:hover {
+  transition: 1s ease-in-out;
+  background: #d9a8a8;
+}
+
+.btn:hover svg {
+  stroke-dashoffset: -480;
+}
+
+.btn span {
+  color: white;
+  font-size: 18px;
+  font-weight: 100;
+}
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f7f7f7;
+}
+
+/* Message container */
+.message-container {
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
+/* Individual message */
+.message {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+/* User message */
+.user-message {
+  justify-content: flex-end;
+}
+
+/* Bot message */
+.bot-message {
+  justify-content: flex-start;
+}
+
+/* Input container */
+.input-container {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Input box */
+.input-container input[type="text"] {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+}
+
+.input-container input[type="submit"] {
+  margin-left: 10px;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out; /* Add animation transition */
+}
+
+/* On hover */
+.input-container input[type="submit"]:hover {
+  background-color: #3e8e41;
+  transform: scale(1.1); /* Add hover effect */
+}
+
+/* On active */
+.input-container input[type="submit"]:active {
+  background-color: #3e8e41;
+  transform: scale(0.9); /* Add active effect */
+}
+
+/* Image container */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+/* Generated image */
+.image-container img {
+  max-height: 100%;
+  max-width: 100%;
+  border-radius: 5px;
+}
