@@ -6,6 +6,8 @@ from torchvision import transforms
 from transformers import DistilBertModel, DistilBertConfig, DistilBertTokenizer
 import torch.nn.functional as F
 
+from torchvision.models import ResNet
+
 # CLIP implementation for 1 BATCH
 
 class ProjectionHead(nn.Module):
@@ -36,6 +38,7 @@ a1 = m(a)
 print(a1.shape)"""
 
 def cross_entropy_loss(preds, targets, reduction="none"):
+    
   log_softmax = nn.LogSoftmax(dim=-1)
   loss = (-targets * log_softmax(preds)).sum(1)
   if reduction == "none":
@@ -44,6 +47,9 @@ def cross_entropy_loss(preds, targets, reduction="none"):
     return loss.mean()
 
 def extract_text_embedding():
+
+  img_model = ResNet("50", layers)
+
 
   tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
   encoded_query = tokenizer(["this is a text yeah"])
@@ -90,4 +96,4 @@ def extract_text_embedding():
   print(loss.mean())
   return loss.mean()
 
-extract_text_embedding()
+clip = extract_text_embedding()

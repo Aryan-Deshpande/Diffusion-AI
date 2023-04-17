@@ -1,3 +1,5 @@
+
+
 import torch 
 import torch.nn as nn
 
@@ -5,6 +7,15 @@ from torchvision import transforms
 
 # backward
 import torch.nn as nn
+
+class Attention(nn.Module):
+    def __init__(self,x,t):
+        pass
+
+        self.qkv = nn.Linear(in_ch, 3*in_ch)
+
+    def forward(self,x):
+        pass
 
 class SPE(nn.Module):
   def __init__(self):
@@ -26,7 +37,7 @@ class Block(nn.Module):
       self.transform = nn.Conv2d(out_ch, out_ch, 4, 2, 1)
     else:
       self.conv1 = nn.Conv2d(2*out_ch, in_ch, 3, padding=1)
-      self.transform = nn.ConvTranspose(out_ch, out_ch, 4, 2, 1)
+      self.transform = nn.ConvTranspose2d(out_ch, out_ch, 4, 2, 1)
 
     self.conv2 = nn.Conv2d(out_ch, out_ch, 3, padding=1)
     self.pool = nn.MaxPool2d(3, stride=2)
@@ -65,20 +76,52 @@ class unet(nn.Module):
     time_emb_dim = 32
 
     # Time embedding
-    self.time_mlp = nn.Sequential(
+    """self.time_mlp = nn.Sequential(
         SinusodialPositionEmbeddings(time_emb_dim),
         nn.Linear(time_emb_dim, time_emb_dim),
         nn.ReLU()
-    )
+    )"""
 
     self.conv0 = nn.Conv2d(image_channels, down_channels[0], 3, padding=1)
 
-    self.downs = nn.ModuleList([Block( down_channels[i], down_channels[i+1], time_emb_dim ) for i in range(len(down_channels)-1 )])
+    self.downs = nn.ModuleList( [ Block( down_channels[i], down_channels[i+1], time_emb_dim ) for i in range(len(down_channels)-1 )] )
     self.ups = nn.ModuleList( [ Block(up_channels[i], up_channels[i+1], time_emb_dim, up=True) for i in range(len(up_channels)-1 )] )
-  
+    
+    self.output = nn.Conv2d(up_channels[-1], 3, out_dim)
+
   def forward(self, x):
-    pass
+    x = self.time_mlp(x)
 
+    first_conv_out = conv0(x)
 
+    for down in downs:
+        residual = []
+        x = down(x)
 
+        residual.append(x)
+    
+    # residual connection ?
+    # attention block
+    # residual connection ?
+    
+    for up in ups:
+        residual_x = residual.pop()
+
+        # add the residual as a additional channel
+        x = torch.cat(residual_x, x, dim=1)
+        x = up(x, t)
+
+        return self.output(x)
+
+from PIL import Image
+img = Image.open('./da.png')
+
+trans = transforms.Compose([
+    transforms.ToTensor()
+])
+
+img = trans(img)
+img.shape
+
+model = unet()
 
