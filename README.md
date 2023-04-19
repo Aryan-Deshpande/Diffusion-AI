@@ -10,3 +10,9 @@ git clone https://github.com/Aryan-Deshpande/Latent-Diffusion-AI
 docker compose up
 ```
 <sp>then go to localhost:3001<sp>
+
+# Diffusion Working
+- Essentially the idea is such that we use a Gaussian distribution to noise the image, at particular timesteps.
+- Instead of sequentially utilizing the output of the previous timestep to apply noise until t timestamp
+- we directly sample the noised image at all timestamps Xt, this can be done because the sum of Gaussian distribution is nothing but Gaussian 
+- 
