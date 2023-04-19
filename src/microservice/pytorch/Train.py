@@ -11,12 +11,21 @@ from PIL import Image
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 def Training():
+    # hardcoded work , needs to be dynamic
+    beta_start=0.0004
+    beta_end = 0.02
+    noise_step = 10
+    noiser = Diffusion()
+
     for i in range(100):
 
         optimizer.zero_grad()
 
         print('Before forward noising')
         x_noisy_image, noise = forward_diff()
+########################################################
+        noiser.noise_image(generated_image, 1) # need to see what param goes into timestamp
+        ########################################################
         print('before unet forward pass')
         noise_predicted = UNet(x_noisy_image)
 
@@ -35,6 +44,8 @@ def Training():
         optimizer.step()
 
         print('..........')
+
+        # so where does denoising happen ?
 
 def compute_clip_loss(generated_image, text_prompt_encoded, clip_guidance_scale=0.1):
     with torch.no_grad():
