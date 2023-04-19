@@ -117,4 +117,11 @@ print(alpha_cum_prod)
 
 # mean & variance of gaussian distribution
 # N(xt, sqrt(alpha), beta)
+noise_image = torch.rand_like(trans(image))
+t = 1
+sqrt_alpha_cum_prod = torch.sqrt(alpha_cum_prod[t])[:, None, None, None]
+sqrt_one_minus_alpha_hat = torch.sqrt(1 - alpha_cum_prod[t])[:, None, None, None]
+rand = torch.rand_like(image)
+
+print(sqrt_alpha_cum_prod + sqrt_one_minus_alpha_hat * noise_image, noise_image)
 
