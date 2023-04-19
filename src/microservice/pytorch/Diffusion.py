@@ -106,7 +106,7 @@ revtrans = transforms.Compose([
 ])
 
 # noise for single step
-noise_image = torch.rand_like(trans(image))
+noise_image = torch.rand_like(generated_image)
 image = revtrans(noise_image)
 ##image.show()
 
@@ -117,11 +117,47 @@ print(alpha_cum_prod)
 
 # mean & variance of gaussian distribution
 # N(xt, sqrt(alpha), beta)
-noise_image = torch.rand_like(trans(image))
 t = 1
-sqrt_alpha_cum_prod = torch.sqrt(alpha_cum_prod[t])[:, None, None, None]
-sqrt_one_minus_alpha_hat = torch.sqrt(1 - alpha_cum_prod[t])[:, None, None, None]
-rand = torch.rand_like(image)
+sqrt_alpha_cum_prod = torch.sqrt(alpha_cum_prod[t])
 
-print(sqrt_alpha_cum_prod + sqrt_one_minus_alpha_hat * noise_image, noise_image)
+sqrt_one_minus_alpha_hat = torch.sqrt(1 - alpha_cum_prod[t])
 
+rand = torch.rand_like(generated_image)
+
+"""n,j = sqrt_alpha_cum_prod + sqrt_one_minus_alpha_hat * rand, rand
+
+new = revtrans(n)
+new.show()"""
+
+class Diffusion:
+  def __init__(self, beta_start, beta_end, noise_step):
+    self.beta_start = beta_start
+    self.beta_end = beta_end
+    self.noise_step = noise_step
+    self.beta = self.beta_schedular(self.beta_start, self.beta_end, self.noise_step)
+    self.alpha = 1 - self.beta
+    self.alpha_cum_prod = torch.cumprod(alpha_cum_prod, dim=0)
+
+  def beta_schedular(self, beta_start, beta_end, noise_step):
+    return torch.linspace(beta_start, beta_end, noise_step)
+    
+  def noise_image(self, x0, t):
+    sqrt_alpha_cum_prod = torch.sqrt(alpha_cum_prod[t])
+    sqrt_one_minus_alpha_cum_prod = torch.sqrt(1 - alpha_cum_prod[t])
+
+    rand = torch.rand_like(x0)
+    return ( sqrt_alpha_cum_prod + ( sqrt_one_minus_alpha_cum_prod * x0) ), x0
+
+beta_start=0.0004
+beta_end = 0.02
+noise_step = 10
+noiser = Diffusion(beta_start, beta_end, noise_step)
+
+x0, n0 = noiser.noise_image(generated_image, 1)
+x10, n10 = noiser.noise_image(generated_image, 4)
+
+x0image = revtrans(x0)
+x10image = revtrans(x10)
+
+x0image.show()
+x10image.show()
