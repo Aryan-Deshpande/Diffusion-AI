@@ -1,0 +1,20 @@
+version: "1.0"
+services:
+  backend:
+    container_name: flask-app
+    build: ./Backend
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./backend:/usr/src/app # needs change
+  frontend:
+    container_name: react-app
+    build: ./Frontend
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./Frontend:/usr/src/app
+    depends_on:
+      - backend
