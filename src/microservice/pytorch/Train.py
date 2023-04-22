@@ -1,7 +1,9 @@
-from Diffusion import forward_diff
+#from Diffusion import forward_diff
 from UNet import UNetAE
 #from CLIP import CLIPmodel
 
+from Diffusion import DiffusionSched
+from torch import Tensor
 import torch
 from torchvision import transforms
 
@@ -10,28 +12,31 @@ from PIL import Image
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-def Training():
+def Training(generated_image):
     # hardcoded work , needs to be dynamic
     beta_start=0.0004
     beta_end = 0.02
     noise_step = 10
-    noiser = Diffusion()
+    noiser = DiffusionSched(beta_start, beta_end, noise_step)
 
-    for i in range(100):
+    # Initialize the Autoencoder Model
+    model = UNetAE()
 
-        optimizer.zero_grad()
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=1e-4)
+
+    for i in range(noise_step):
+        random_timestep = noiser.sample_n(1000).to(device)
+        print('it is on device', random_timestep.get_device())
 
         print('Before forward noising')
-        x_noisy_image, noise = forward_diff()
-########################################################
-        noiser.noise_image(generated_image, 1) # need to see what param goes into timestamp
-        ########################################################
-        print('before unet forward pass')
-        noise_predicted = UNet(x_noisy_image)
+        x_noisy_image, noise = noiser.noise_image(generated_image, i)
+
+        print('before unet forward pass', x_noisy_image.shape, 'noisy image')
+        noise_predicted = model(x_noisy_image, random_timestep)
 
         # finding the CLIP loss
         print('before computing clip loss')
-        clip_loss = computer_clip_loss()
+        clip_loss = computer_clip_loss(generated_image, "city skyline with lava on the road")
 
         print('before computing l1 loss')
         l1_loss = torch.nn.functional.l1_loss(noise_pred, noise)
@@ -40,8 +45,10 @@ def Training():
         final_loss = l1_loss + clip_loss
         print('calculating final loss')
 
+        #################################################################################
         final_loss.backward()
         optimizer.step()
+        optimizer.zero_grad()
 
         print('..........')
 
@@ -72,7 +79,6 @@ def compute_clip_loss(generated_image, text_prompt_encoded, clip_guidance_scale=
 
         return clip_loss
 
-#image = Image.open('./da.png')
 image = Image.open('./das.jpg')
 trans = transforms.Compose([
     transforms.ToTensor(),
@@ -85,9 +91,11 @@ print(generated_image.shape, ' new shape ')
 
 generated_image = generated_image.to(device)
 
-generated_image = torch.nn.functional.interpolate(generated_image, size=(224, 224), mode='bilinear', align_corners=False)
+generated_image = torch.nn.functional.interpolate(generated_image, size=(3, 3), mode='bilinear', align_corners=False)
+print(generated_image.shape, 'shape of image before training function')
+#compute_clip_loss(generated_image, "city skyline with lava on the road")
 
-compute_clip_loss(generated_image, "city skyline with lava on the road")
+Training(generated_image)
 
 # Total number of parameters 
 #print( sum(i.numel() for i in model.parameters() ))
