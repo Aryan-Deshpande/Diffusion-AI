@@ -28,14 +28,6 @@ docker compose up
 ```
 *then go to localhost:3001*
 
-# Diffusion Working
-
-Algorithm
-
-- Essentially the idea is such that we use a Gaussian distribution to noise the image, at particular timesteps.
-- Instead of sequentially utilizing the output of the previous timestep to apply noise until t timestamp
-- we directly sample the noised image at all timestamps Xt, this can be done because the sum of Gaussian distribution is nothing but Gaussian
-
 ### Papers Referenced / Used
 - **Attention is All you Need** [https://arxiv.org/abs/1706.03762]
 - **Contrastive Language Image Pre-Training** [https://browse.arxiv.org/pdf/2103.00020.pdf]
