@@ -26,7 +26,7 @@ The latent space is the representation of compressed data, containing data that 
 git clone https://github.com/Aryan-Deshpande/Latent-Diffusion-AI
 docker compose up
 ```
-<sp> --> then go to localhost:3001<sp>
+*then go to localhost:3001*
 
 # Diffusion Working
 
