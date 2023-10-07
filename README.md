@@ -12,9 +12,11 @@ Utilizes multiple Deep Learning Model Arcitectures
 # During Training
 *1)* The idea is such that we use a Gaussian distribution to noise the training image at particular timestamps.
 Instead of sequentially utilizing the output of the previous timestep to apply noise until t timestamp, we directly sample the noised image at all timestamps Xt, this can be done because the sum of Gaussian distribution is nothing but Gaussian itself.
+<br>
 *2)* Consequently, the output of this process is then fed into a UNet Model along with the text label for the pertaining image.
 The goal of the UNet model is to transform the text label, and the image into a smaller dimensional space, famously known as the latent space.
 The latent space is the representation of compressed data, containing data that are similar, are closer together. ( Represents the Probability Distribution of the data )
+<br>
 *3)* Contrastive Loss and Cosine Similarity are utilized as guidance to optimize the generation of these images. The weights in the attention modules are shifted accordingly, until the loss reaches a minimal amount.
 
 ## Run it Locally
