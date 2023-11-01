@@ -32,5 +32,5 @@ docker compose up
 - **Attention is All you Need** [https://arxiv.org/abs/1706.03762]
 - **Contrastive Language Image Pre-Training** [https://browse.arxiv.org/pdf/2103.00020.pdf]
 - **U-Net: Convolutional Networks for Biomedical Image Segmentation** [https://arxiv.org/abs/1505.04597]
-- **High-Resolution Image Synthesis with Latent Diffusion Models**[https://arxiv.org/abs/2112.10752]
+- **High-Resolution Image Synthesis with Latent Diffusion Models** [https://arxiv.org/abs/2112.10752]
 
